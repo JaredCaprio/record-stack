@@ -1,0 +1,32 @@
+.main {
+  display: flex;
+  background-color: #333;
+  padding: 0.5em;
+  min-width: 100%;
+  margin-bottom: 1em;
+}
+
+.main:hover {
+  background-color: #333355;
+  cursor: pointer;
+}
+
+.placement {
+  font-size: 3rem;
+  margin-right: 0.25em;
+}
+
+.image {
+  display: flex;
+  min-width: 200px;
+}
+
+.albumInfo {
+  display: flex;
+  flex-direction: column;
+  /*   align-items: flex-end; */
+}
+
+.year {
+  opacity: 0.5;
+}
