@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Album from "./components/Album";
-import { Autocomplete, Button } from "@mui/material";
+import AlbumOption from "./components/AlbumOption";
+import { Autocomplete, Button, Container } from "@mui/material";
 import TextField from "@mui/material/TextField/TextField";
-import { debounce } from "lodash";
+import HelpDialog from "./components/HelpDialog";
 import { DndContext, closestCenter } from "@dnd-kit/core";
+import { debounce } from "lodash";
 import {
   arrayMove,
   SortableContext,
@@ -20,15 +22,28 @@ type Album = {
 };
 
 function App() {
+  //getting album list out of local storage on page load
+
+  const albumListFromLocalStorage = JSON.parse(
+    localStorage.getItem("albums") || "[]"
+  );
+
   const [searchInput, setSearchInput] = useState<string>("");
   const [albums, setAlbums] = useState<Album[]>([]);
-  const [albumList, setAlbumList] = useState<Album[]>([]);
+  const [albumList, setAlbumList] = useState<Album[]>(
+    albumListFromLocalStorage
+  );
   const [selectedAlbum, setSelectedAlbum] = useState<Album[]>([]);
   const [accessToken, setAccessToken] = useState<string>("");
 
   //ENV
   const ID = import.meta.env.VITE_SPOT_CLIENT_ID;
   const SECRET = import.meta.env.VITE_SPOT_CLIENT_SECRET;
+
+  //Save albums list into local storage
+  useEffect(() => {
+    localStorage.setItem("albums", JSON.stringify(albumList));
+  }, [albumList]);
 
   //getting auth token from spotify
   useEffect(() => {
@@ -43,11 +58,10 @@ function App() {
     fetch(`https://accounts.spotify.com/api/token`, authParams)
       .then((result) => result.json())
       .then((data) => setAccessToken(data.access_token))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [ID, SECRET]);
 
   //search
-
   const search = debounce(async () => {
     const albumParams = {
       method: "GET",
@@ -58,10 +72,11 @@ function App() {
     };
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/search?q=${searchInput}&type=album&limit=5`,
+        `https://api.spotify.com/v1/search?q=${searchInput}&type=album&limit=10`,
         albumParams
       );
       const data = await res.json();
+
       setAlbums(data?.albums?.items);
     } catch (error) {
       console.log(error);
@@ -71,6 +86,7 @@ function App() {
   //handle drag end
   const handleDragEnd = (event: { active: any; over: any }) => {
     const { active, over } = event;
+
     if (active.id !== over.id) {
       setAlbumList((items) => {
         const activeIndex = items.findIndex((item) => item.id == active.id);
@@ -88,6 +104,13 @@ function App() {
     }
   };
 
+  //delete item from album list state
+  const deleteAlbum = (albumId: string) => {
+    setAlbumList((previousState) =>
+      previousState.filter((album) => album.id !== albumId)
+    );
+  };
+
   //autocomplete options
   const optionsAc =
     albums &&
@@ -95,36 +118,42 @@ function App() {
       name: album.name,
       artists: album.artists[0].name,
       release_date: album.release_date.slice(0, 4),
-      images: album.images[0].url,
+      images: album?.images[0]?.url,
       id: album.id,
     }));
 
   return (
     <>
-      <div className="main-container">
-        <h1>Top Albums List</h1>
+      <Container className="main-container">
         <div className="input-container">
           <Autocomplete
-            sx={{ width: 500, backgroundColor: "white", color: "white" }}
+            sx={{
+              backgroundColor: "#242424",
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#242424",
+                },
+            }}
             options={optionsAc}
             filterOptions={(options) => options}
             renderOption={(props, optionsAc) => (
               <li {...props} key={optionsAc.id}>
-                <Album
+                <AlbumOption
                   title={optionsAc.name}
                   artist={optionsAc.artists}
                   image={optionsAc.images}
                   year={optionsAc.release_date}
                   id={optionsAc.id}
-                ></Album>
+                ></AlbumOption>
               </li>
             )}
             getOptionLabel={(options) => options.name}
-            isOptionEqualToValue={(option, value) => option.name === value.name}
+            isOptionEqualToValue={() => true}
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Add an Album"
+                sx={{ input: { color: "white" }, label: { color: "white" } }}
+                label="Search for Album"
                 variant="outlined"
                 onChange={(e) => handleInputChange(e.target.value)}
               />
@@ -146,7 +175,7 @@ function App() {
             onClick={() =>
               setAlbumList((previousState) => {
                 const albumExists = previousState.some((album) => {
-                  return album.name === selectedAlbum[0].name;
+                  return album.id === selectedAlbum[0].id;
                 });
                 if (albumExists) {
                   return [...previousState];
@@ -155,7 +184,7 @@ function App() {
               })
             }
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             Add Album
           </Button>
@@ -170,23 +199,26 @@ function App() {
               strategy={verticalListSortingStrategy}
             >
               {albumList?.map((item, i) => (
-                <Album
-                  key={item.name}
-                  id={item.id}
-                  image={item.images[0].url}
-                  title={item.name}
-                  artist={item.artists[0].name}
-                  year={item.release_date.slice(0, 4)}
-                  placement={i + 1}
-                />
-                /*   <div key={i} id={item.id}>
-                  {item.name}
-                </div> */
+                <div key={i}>
+                  <Album
+                    width={"auto"}
+                    delBtn={true}
+                    key={item.id}
+                    id={item.id}
+                    image={item.images[0].url}
+                    title={item.name}
+                    artist={item.artists[0].name}
+                    year={item.release_date.slice(0, 4)}
+                    placement={i + 1}
+                    onDelete={deleteAlbum}
+                  />
+                </div>
               ))}
             </SortableContext>
           </DndContext>
         </div>
-      </div>
+      </Container>
+      <HelpDialog />
     </>
   );
 }

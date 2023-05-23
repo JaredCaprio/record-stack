@@ -1,10 +1,13 @@
 .main {
   display: flex;
   justify-content: space-between;
-  padding: 0.5em;
-  min-width: 100%; /* 
-  transition: background-color 150ms ease-in; */
-  margin: 0;
+  position: relative;
+  padding: 1em;
+  width: 100%;
+  max-width: 900px;
+  gap: 1.25em;
+  transition: background-color 150ms ease-in;
+  margin: 1em 0;
   border: 1px solid black;
 }
 
