@@ -34,7 +34,10 @@ export default function HelpDialog() {
       >
         <QuestionMark fontSize="large" />
       </Fab>
-
+      <code style={{ position: "absolute", bottom: 2, left: 2, fontSize: 12 }}>
+        Designed and Developed by{" "}
+        <a href="https://www.github.com/jaredcaprio">Jared Caprio</a>
+      </code>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
