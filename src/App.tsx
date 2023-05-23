@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Album from "./components/Album";
 import AlbumOption from "./components/AlbumOption";
-import { Autocomplete, Button, Container } from "@mui/material";
+import { Autocomplete, Button, Container, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField/TextField";
 import HelpDialog from "./components/HelpDialog";
 import { DndContext, closestCenter } from "@dnd-kit/core";
@@ -190,6 +190,14 @@ function App() {
           </Button>
         </div>
         <div className="list-container">
+          {albumList.length === 0 && (
+            <div style={{ textAlign: "center" }}>
+              <Typography variant="h4" sx={{ margin: "1em" }}>
+                Welcome to Record Stack
+              </Typography>
+              <p>Search for an album to start building your List</p>
+            </div>
+          )}
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
