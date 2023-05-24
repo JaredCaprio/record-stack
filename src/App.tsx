@@ -12,18 +12,18 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-//interface
+//type definition
 type Album = {
   name: string;
   artists: { name: string }[];
   release_date: string;
   images: { url: string }[];
   id: string;
+  external_urls: { spotify: string };
 };
 
 function App() {
   //getting album list out of local storage on page load
-
   const albumListFromLocalStorage = JSON.parse(
     localStorage.getItem("albums") || "[]"
   );
@@ -76,15 +76,13 @@ function App() {
         albumParams
       );
       const data = await res.json();
-
       setAlbums(data?.albums?.items);
     } catch (error) {
       console.log(error);
     }
   }, 1000);
 
-  //handle drag end
-  const handleDragEnd = (event: { active: any; over: any }) => {
+  const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -118,7 +116,8 @@ function App() {
       name: album.name,
       artists: album.artists[0].name,
       release_date: album.release_date.slice(0, 4),
-      images: album?.images[0]?.url,
+      images: album?.images[2]?.url,
+      external_url: album.external_urls.spotify,
       id: album.id,
     }));
 
@@ -166,7 +165,9 @@ function App() {
                   release_date: value.release_date,
                   images: [{ url: value.images }],
                   id: value.id,
+                  external_urls: { spotify: value.external_url },
                 };
+
                 setSelectedAlbum([album]);
               }
             }}
@@ -212,6 +213,7 @@ function App() {
                     width={"auto"}
                     delBtn={true}
                     key={item.id}
+                    url={item.external_urls.spotify}
                     id={item.id}
                     image={item.images[0].url}
                     title={item.name}

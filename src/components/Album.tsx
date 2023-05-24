@@ -11,6 +11,7 @@ interface Props {
   artist: string;
   year: string;
   placement?: number;
+  url: string;
   id: string;
   width?: string;
   delBtn: boolean;
@@ -23,6 +24,7 @@ const Album: React.FC<Props> = ({
   artist,
   year,
   placement,
+  url,
   id,
   width,
   delBtn,
@@ -48,7 +50,9 @@ const Album: React.FC<Props> = ({
           <DragHandleIcon fontSize="large" />
         </IconButton>
         <div className={AlbumCSS.placement}>{placement}</div>
-        <img src={image} alt="" height="75" />
+        <a target="_blank" href={url} title="Click to listen on Spotify">
+          <img src={image} alt="" height="75" />
+        </a>
       </div>
       <div className={AlbumCSS.albumInfo}>
         {delBtn && (

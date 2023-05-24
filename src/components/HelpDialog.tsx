@@ -34,16 +34,13 @@ export default function HelpDialog() {
       >
         <QuestionMark fontSize="large" />
       </Fab>
-      <code style={{ position: "absolute", bottom: 2, left: 2, fontSize: 12 }}>
-        Designed and Developed by{" "}
-        <a href="https://www.github.com/jaredcaprio">Jared Caprio</a>
-      </code>
+
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="Dialog-title"
       >
-        <DialogTitle id="dialog-title">How To use Top Album List</DialogTitle>
+        <DialogTitle id="dialog-title">How to use Record Stack</DialogTitle>
         <DialogContent>
           <>
             <List>
@@ -74,6 +71,12 @@ export default function HelpDialog() {
             </Typography>
           </>
         </DialogContent>
+        <code
+          style={{ position: "absolute", bottom: 15, left: 25, fontSize: 12 }}
+        >
+          Designed and Developed by{" "}
+          <a href="https://www.github.com/jaredcaprio">Jared Caprio</a>
+        </code>
         <DialogActions>
           <Button autoFocus onClick={() => setOpen(false)}>
             Close
