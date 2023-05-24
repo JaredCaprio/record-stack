@@ -118,7 +118,7 @@ function App() {
       artists: album.artists[0].name,
       release_date: album.release_date.slice(0, 4),
       images: album?.images[2]?.url,
-      external_urls: album.external_urls.spotify,
+      external_urls: album?.external_urls?.spotify,
       id: album.id,
     }));
 
