@@ -77,6 +77,7 @@ function App() {
       );
       const data = await res.json();
       setAlbums(data?.albums?.items);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -117,7 +118,7 @@ function App() {
       artists: album.artists[0].name,
       release_date: album.release_date.slice(0, 4),
       images: album?.images[2]?.url,
-      external_url: album.external_urls.spotify,
+      external_urls: album.external_urls.spotify,
       id: album.id,
     }));
 
@@ -165,7 +166,7 @@ function App() {
                   release_date: value.release_date,
                   images: [{ url: value.images }],
                   id: value.id,
-                  external_urls: { spotify: value.external_url },
+                  external_urls: { spotify: value.external_urls },
                 };
 
                 setSelectedAlbum([album]);
