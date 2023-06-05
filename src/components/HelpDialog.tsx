@@ -61,7 +61,7 @@ export default function HelpDialog() {
               </ListItem>
               <ListItem>
                 <ListItemText>
-                  Click and drag to handle to rearrange order
+                  Click and drag on handle to rearrange order
                 </ListItemText>
               </ListItem>
             </List>
