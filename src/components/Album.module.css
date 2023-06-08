@@ -27,6 +27,12 @@
   align-items: flex-end;
 }
 
+.albumTitle,
+.artist {
+  text-align: end;
+  max-width: 9rem;
+}
+
 .year {
   opacity: 0.5;
 }

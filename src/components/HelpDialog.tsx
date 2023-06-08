@@ -72,7 +72,14 @@ export default function HelpDialog() {
           </>
         </DialogContent>
         <code
-          style={{ position: "absolute", bottom: 15, left: 25, fontSize: 12 }}
+          style={{
+            position: "absolute",
+            bottom: 15,
+            left: 25,
+            fontSize: 11,
+            maxWidth: "10rem",
+            textAlign: "center",
+          }}
         >
           Designed and Developed by{" "}
           <a href="https://www.github.com/jaredcaprio">Jared Caprio</a>

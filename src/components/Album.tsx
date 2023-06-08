@@ -64,7 +64,7 @@ const Album: React.FC<Props> = ({
           </IconButton>
         )}
         <span className={AlbumCSS.albumTitle}>{title}</span>
-        <span className="artist">{artist}</span>
+        <span className={AlbumCSS.artist}>{artist}</span>
         <span className={AlbumCSS.year}>{year}</span>
       </div>
     </div>
