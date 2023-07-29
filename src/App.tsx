@@ -5,6 +5,7 @@ import { Autocomplete, Button, Container, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField/TextField";
 import HelpDialog from "./components/HelpDialog";
 import { DndContext, closestCenter } from "@dnd-kit/core";
+import Header from "./components/Header";
 import { debounce } from "lodash";
 import {
   arrayMove,
@@ -77,7 +78,6 @@ function App() {
       );
       const data = await res.json();
       setAlbums(data?.albums?.items);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -126,6 +126,7 @@ function App() {
     <>
       <Container className="main-container">
         <div className="input-container">
+          <Header title="Record Stack" />
           <Autocomplete
             sx={{
               backgroundColor: "#242424",
